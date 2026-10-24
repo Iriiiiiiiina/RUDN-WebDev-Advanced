@@ -37,7 +37,11 @@ app.get("/cards", (_req, res) => {
 });
 
 app.post("/cards", (req, res) => {
-  const { title } = req.body;
+  const title: unknown = req.body?.title;
+  if (typeof title !== "string" || !title.trim()) {
+    res.status(400).json({ error: "title обязателен и не может быть пустым" });
+    return;
+  }
   const newCard: Card = {
     id: randomUUID(),
     title: title.trim(),
