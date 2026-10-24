@@ -1,6 +1,8 @@
+import { randomUUID } from "node:crypto";
 import express from "express";
 
 const app = express();
+app.use(express.json());
 
 type Card = {
   id: string;
@@ -32,6 +34,22 @@ const cards: Card[] = [
 
 app.get("/cards", (_req, res) => {
   res.json(cards);
+});
+
+app.post("/cards", (req, res) => {
+  const title: unknown = req.body?.title;
+  if (typeof title !== "string" || !title.trim()) {
+    res.status(400).json({ error: "title обязателен и не может быть пустым" });
+    return;
+  }
+  const newCard: Card = {
+    id: randomUUID(),
+    title: title.trim(),
+    isDone: false,
+    isUrgent: false,
+  };
+  cards.push(newCard);
+  res.status(201).json(newCard);
 });
 
 app.listen(3001, () => {
