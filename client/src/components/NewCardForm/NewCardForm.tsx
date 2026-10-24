@@ -39,7 +39,7 @@ export function NewCardForm() {
         className={styles.button}
         type="button"
         onClick={handleSubmit}
-        disabled={mutation.isPending}
+        disabled={mutation.isPending || !title.trim()}
       >
         {mutation.isPending ? "Добавление..." : "Добавить"}
       </button>
